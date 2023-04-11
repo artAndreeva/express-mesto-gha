@@ -1,5 +1,6 @@
 const User = require('../models/user');
 
+// POST
 const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
@@ -14,6 +15,7 @@ const createUser = (req, res) => {
     });
 };
 
+// GET
 const getAllUsers = (req, res) => {
   User.find({})
     .then((users) => {
@@ -27,6 +29,7 @@ const getAllUsers = (req, res) => {
     });
 };
 
+// GET
 const getUserById = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
@@ -41,6 +44,7 @@ const getUserById = (req, res) => {
     });
 };
 
+// PATCH
 const updateProfile = (req, res) => {
   const { _id } = req.user;
   const { name, about } = req.body;
@@ -66,6 +70,7 @@ const updateProfile = (req, res) => {
     });
 };
 
+// PATCH
 const updateAvatar = (req, res) => {
   const { _id } = req.user;
   const { avatar } = req.body;

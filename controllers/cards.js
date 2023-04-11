@@ -1,5 +1,6 @@
 const Card = require('../models/card');
 
+// POST
 const createCard = (req, res) => {
   const { _id } = req.user;
   const { name, link } = req.body;
@@ -15,6 +16,7 @@ const createCard = (req, res) => {
     });
 };
 
+// GET
 const getAllCards = (req, res) => {
   Card.find({})
     .populate('owner')
@@ -29,6 +31,7 @@ const getAllCards = (req, res) => {
     });
 };
 
+// DELETE
 const deleteCard = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndRemove(cardId)
@@ -43,6 +46,7 @@ const deleteCard = (req, res) => {
     });
 };
 
+// PUT
 const likeCard = (req, res) => {
   const { _id } = req.user;
   const { cardId } = req.params;
@@ -65,6 +69,7 @@ const likeCard = (req, res) => {
     });
 };
 
+// PATCH
 const unlikeCard = (req, res) => {
   const { _id } = req.user;
   const { cardId } = req.params;
