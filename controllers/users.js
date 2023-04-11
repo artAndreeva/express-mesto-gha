@@ -37,7 +37,7 @@ const getUserById = (req, res) => {
       res.send(user);
     })
     .catch((err) => {
-      if (err.name === 'DocumentNotFoundError') {
+      if (err.name === 'CastError') {
         return res.status(404).send({ message: 'данные не найдены' });
       }
       return res.status(500).send({ message: 'ошибка сервера' });
@@ -63,7 +63,7 @@ const updateProfile = (req, res) => {
       if (err.name === 'ValidationError') {
         return res.status(400).send({ message: 'переданы некорректные данные' });
       }
-      if (err.name === 'DocumentNotFoundError') {
+      if (err.name === 'CastError') {
         return res.status(404).send({ message: 'данные не найдены' });
       }
       return res.status(500).send({ message: 'ошибка сервера' });
@@ -89,7 +89,7 @@ const updateAvatar = (req, res) => {
       if (err.name === 'ValidationError') {
         return res.status(400).send({ message: 'переданы некорректные данные' });
       }
-      if (err.name === 'DocumentNotFoundError') {
+      if (err.name === 'CastError') {
         return res.status(404).send({ message: 'данные не найдены' });
       }
       return res.status(500).send({ message: 'ошибка сервера' });
