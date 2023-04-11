@@ -34,10 +34,12 @@ const getUserById = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
     .then((user) => {
-      res.send(user);
+      if (user) {
+        res.send(user);
+      }
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
+      if (err.name === 'DocumentNotFoundError') {
         return res.status(404).send({ message: 'данные не найдены' });
       }
       return res.status(500).send({ message: 'ошибка сервера' });
@@ -57,13 +59,15 @@ const updateProfile = (req, res) => {
     },
   )
     .then((user) => {
-      res.send(user);
+      if (user) {
+        res.send(user);
+      }
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(400).send({ message: 'переданы некорректные данные' });
       }
-      if (err.name === 'CastError') {
+      if (err.name === 'DocumentNotFoundError') {
         return res.status(404).send({ message: 'данные не найдены' });
       }
       return res.status(500).send({ message: 'ошибка сервера' });
@@ -83,13 +87,15 @@ const updateAvatar = (req, res) => {
     },
   )
     .then((user) => {
-      res.send(user);
+      if (user) {
+        res.send(user);
+      }
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(400).send({ message: 'переданы некорректные данные' });
       }
-      if (err.name === 'CastError') {
+      if (err.name === 'DocumentNotFoundError') {
         return res.status(404).send({ message: 'данные не найдены' });
       }
       return res.status(500).send({ message: 'ошибка сервера' });

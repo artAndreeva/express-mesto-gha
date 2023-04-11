@@ -36,7 +36,9 @@ const deleteCard = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndRemove(cardId)
     .then((card) => {
-      res.send(card);
+      if (card) {
+        res.send(card);
+      }
     })
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') {
@@ -56,7 +58,9 @@ const likeCard = (req, res) => {
     { new: true },
   )
     .then((card) => {
-      res.send(card);
+      if (card) {
+        res.send(card);
+      }
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -79,7 +83,9 @@ const unlikeCard = (req, res) => {
     { new: true },
   )
     .then((card) => {
-      res.send(card);
+      if (card) {
+        res.send(card);
+      }
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
