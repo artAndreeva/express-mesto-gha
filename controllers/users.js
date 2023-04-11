@@ -18,8 +18,10 @@ const createUser = (req, res) => {
 // GET
 const getAllUsers = (req, res) => {
   User.find({})
-    .then((users) => {
-      res.send(users);
+    .then((user) => {
+      if (user) {
+        res.send(user);
+      }
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
