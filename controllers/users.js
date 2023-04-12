@@ -1,6 +1,5 @@
 const User = require('../models/user');
-const checkId = require('../utills/checks');
-const checkErrors = require('../utills/checks');
+const { checkId, checkErrors } = require('../utills/checks');
 
 // POST
 const createUser = (req, res) => {

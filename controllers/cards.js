@@ -1,6 +1,5 @@
 const Card = require('../models/card');
-const checkId = require('../utills/checks');
-const checkErrors = require('../utills/checks');
+const { checkId, checkErrors } = require('../utills/checks');
 
 // POST
 const createCard = (req, res) => {
