@@ -9,6 +9,9 @@ const checkErrors = (err, res) => {
   if (err.name === 'ValidationError') {
     return res.status(400).send({ message: 'переданы некорректные данные' });
   }
+  if (err.name === 'CastError') {
+    return res.status(400).send({ message: 'переданы некорректные данные' });
+  }
   if (err.name === 'DocumentNotFoundError') {
     return res.status(404).send({ message: 'данные не найдены' });
   }
