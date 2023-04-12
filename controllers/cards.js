@@ -1,4 +1,6 @@
 const Card = require('../models/card');
+const checkId = require('../utills/checks');
+const checkErrors = require('../utills/checks');
 
 // POST
 const createCard = (req, res) => {
@@ -6,13 +8,10 @@ const createCard = (req, res) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: _id })
     .then((card) => {
-      res.send(card);
+      checkId(card, res);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'переданы некорректные данные' });
-      }
-      return res.status(500).send({ message: 'ошибка сервера' });
+      checkErrors(err, res);
     });
 };
 
@@ -20,14 +19,11 @@ const createCard = (req, res) => {
 const getAllCards = (req, res) => {
   Card.find({})
     .populate('owner')
-    .then((cards) => {
-      res.send(cards);
+    .then((card) => {
+      checkId(card, res);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'переданы некорректные данные' });
-      }
-      return res.status(500).send({ message: 'ошибка сервера' });
+      checkErrors(err, res);
     });
 };
 
@@ -36,15 +32,10 @@ const deleteCard = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndRemove(cardId)
     .then((card) => {
-      if (card) {
-        res.send(card);
-      }
+      checkId(card, res);
     })
     .catch((err) => {
-      if (err.name === 'DocumentNotFoundError') {
-        return res.status(404).send({ message: 'данные не найдены' });
-      }
-      return res.status(500).send({ message: 'ошибка сервера' });
+      checkErrors(err, res);
     });
 };
 
@@ -58,18 +49,10 @@ const likeCard = (req, res) => {
     { new: true },
   )
     .then((card) => {
-      if (card) {
-        res.send(card);
-      }
+      checkId(card, res);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'переданы некорректные данные' });
-      }
-      if (err.name === 'DocumentNotFoundError') {
-        return res.status(404).send({ message: 'данные не найдены' });
-      }
-      return res.status(500).send({ message: 'ошибка сервера' });
+      checkErrors(err, res);
     });
 };
 
@@ -83,18 +66,10 @@ const unlikeCard = (req, res) => {
     { new: true },
   )
     .then((card) => {
-      if (card) {
-        res.send(card);
-      }
+      checkId(card, res);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'переданы некорректные данные' });
-      }
-      if (err.name === 'DocumentNotFoundError') {
-        return res.status(404).send({ message: 'данные не найдены' });
-      }
-      return res.status(500).send({ message: 'ошибка сервера' });
+      checkErrors(err, res);
     });
 };
 

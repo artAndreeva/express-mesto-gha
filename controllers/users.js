@@ -1,19 +1,16 @@
 const User = require('../models/user');
+const checkId = require('../utills/checks');
+const checkErrors = require('../utills/checks');
 
 // POST
 const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
     .then((user) => {
-      if (user) {
-        res.send(user);
-      }
+      checkId(user, res);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'переданы некорректные данные' });
-      }
-      return res.status(500).send({ message: 'ошибка сервера' });
+      checkErrors(err, res);
     });
 };
 
@@ -21,15 +18,10 @@ const createUser = (req, res) => {
 const getAllUsers = (req, res) => {
   User.find({})
     .then((user) => {
-      if (user) {
-        res.send(user);
-      }
+      checkId(user, res);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'переданы некорректные данные' });
-      }
-      return res.status(500).send({ message: 'ошибка сервера' });
+      checkErrors(err, res);
     });
 };
 
@@ -38,15 +30,10 @@ const getUserById = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
     .then((user) => {
-      if (user) {
-        res.send(user);
-      }
+      checkId(user, res);
     })
     .catch((err) => {
-      if (err.name === 'DocumentNotFoundError') {
-        return res.status(404).send({ message: 'данные не найдены' });
-      }
-      return res.status(500).send({ message: 'ошибка сервера' });
+      checkErrors(err, res);
     });
 };
 
@@ -63,18 +50,10 @@ const updateProfile = (req, res) => {
     },
   )
     .then((user) => {
-      if (user) {
-        res.send(user);
-      }
+      checkId(user, res);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'переданы некорректные данные' });
-      }
-      if (err.name === 'DocumentNotFoundError') {
-        return res.status(404).send({ message: 'данные не найдены' });
-      }
-      return res.status(500).send({ message: 'ошибка сервера' });
+      checkErrors(err, res);
     });
 };
 
@@ -91,18 +70,10 @@ const updateAvatar = (req, res) => {
     },
   )
     .then((user) => {
-      if (user) {
-        res.send(user);
-      }
+      checkId(user, res);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'переданы некорректные данные' });
-      }
-      if (err.name === 'DocumentNotFoundError') {
-        return res.status(404).send({ message: 'данные не найдены' });
-      }
-      return res.status(500).send({ message: 'ошибка сервера' });
+      checkErrors(err, res);
     });
 };
 
