@@ -1,6 +1,6 @@
-const checkId = (user, res) => {
-  if (user) {
-    return res.send(user);
+const checkId = (id, res) => {
+  if (id) {
+    return res.send(id);
   }
   return res.status(400).send({ message: 'переданы некорректные данные' });
 };

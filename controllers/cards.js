@@ -8,7 +8,7 @@ const createCard = (req, res) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: _id })
     .then((card) => {
-      checkId(card, res);
+      res.send(card);
     })
     .catch((err) => {
       checkErrors(err, res);
@@ -19,8 +19,8 @@ const createCard = (req, res) => {
 const getAllCards = (req, res) => {
   Card.find({})
     .populate('owner')
-    .then((card) => {
-      checkId(card, res);
+    .then((cards) => {
+      res.send(cards);
     })
     .catch((err) => {
       checkErrors(err, res);

@@ -7,7 +7,7 @@ const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
     .then((user) => {
-      checkId(user, res);
+      res.send(user);
     })
     .catch((err) => {
       checkErrors(err, res);
@@ -17,8 +17,8 @@ const createUser = (req, res) => {
 // GET
 const getAllUsers = (req, res) => {
   User.find({})
-    .then((user) => {
-      checkId(user, res);
+    .then((users) => {
+      res.send(users);
     })
     .catch((err) => {
       checkErrors(err, res);
