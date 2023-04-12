@@ -1,8 +1,8 @@
 const checkId = (id, res) => {
-  if (id) {
-    return res.send(id);
+  if (!id) {
+    return res.status(404).send({ message: 'данные не найдены' });
   }
-  return res.status(400).send({ message: 'переданы некорректные данные' });
+  return res.send(id);
 };
 
 const checkErrors = (err, res) => {
