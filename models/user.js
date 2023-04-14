@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+require('mongoose-type-url');
 
 const userScheme = mongoose.Schema({
   name: {
@@ -14,7 +15,7 @@ const userScheme = mongoose.Schema({
     maxLength: 30,
   },
   avatar: {
-    type: String,
+    type: mongoose.Schema.Types.Url,
     required: true,
   },
 });
