@@ -14,7 +14,7 @@ usersRouter.get('/me', getProfile);
 
 usersRouter.get('/:userId', celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().alphanum().length(24),
+    userId: Joi.string().alphanum().length(24),
   }),
 }), getUserById);
 
