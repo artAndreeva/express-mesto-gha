@@ -1,43 +1,110 @@
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const { checkId, checkErrors } = require('../utills/checks');
+const { JWT_SECRET } = require('../utills/constants');
+const NotFoundError = require('../erorrs/not-found-error');
+const BadRequestError = require('../erorrs/bad-request-error');
+const ConflictError = require('../erorrs/conflict-error');
 
-// POST
-const createUser = (req, res) => {
-  const { name, about, avatar } = req.body;
-  User.create({ name, about, avatar })
+// +
+const createUser = (req, res, next) => {
+  const {
+    name,
+    about,
+    avatar,
+    email,
+    password,
+  } = req.body;
+  bcrypt.hash(password, 10)
+    .then((hash) => {
+      User.create({
+        name,
+        about,
+        avatar,
+        email,
+        password: hash,
+      });
+    })
     .then((user) => {
+      res.status(201).send({
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        email: user.email,
+        _id: user._id,
+      });
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('Переданы некорректные данные'));
+      }
+      if (err.code === 11000) {
+        next(new ConflictError('Пoльзователь уже зарегистрирован'));
+      }
+      next(err);
+    });
+};
+// +
+const login = (req, res, next) => {
+  const { email, password } = req.body;
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign(
+        { _id: user._id },
+        JWT_SECRET,
+        { expiresIn: '7d' },
+      );
+      res.send({ token });
+    })
+    .catch(next);
+};
+// +
+const getProfile = (req, res, next) => {
+  const { _id } = req.user;
+  User.findById(_id)
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError('Карточка или пользователь не найден');
+      }
       res.send(user);
     })
     .catch((err) => {
-      checkErrors(err, res);
+      if (err.name === 'CastError') {
+        next(new BadRequestError('Переданы некорректные данные'));
+      }
+      next(err);
     });
 };
 
-// GET
-const getAllUsers = (req, res) => {
+// +
+const getAllUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
       res.send(users);
     })
-    .catch((err) => {
-      checkErrors(err, res);
-    });
+    .catch(next);
 };
 
-// GET
-const getUserById = (req, res) => {
+// +
+const getUserById = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId)
     .then((user) => {
-      checkId(user, res);
+      if (!user) {
+        throw new NotFoundError('Карточка или пользователь не найден');
+      }
+      res.send(user);
     })
     .catch((err) => {
-      checkErrors(err, res);
+      if (err.name === 'CastError') {
+        next(new BadRequestError('Переданы некорректные данные'));
+      }
+      next(err);
     });
 };
 
-// PATCH
-const updateProfile = (req, res) => {
+// +
+const updateProfile = (req, res, next) => {
   const { _id } = req.user;
   const { name, about } = req.body;
   User.findByIdAndUpdate(
@@ -49,15 +116,21 @@ const updateProfile = (req, res) => {
     },
   )
     .then((user) => {
-      checkId(user, res);
+      if (!user) {
+        throw new NotFoundError('Карточка или пользователь не найден');
+      }
+      res.send(user);
     })
     .catch((err) => {
-      checkErrors(err, res);
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('Переданы некорректные данные'));
+      }
+      next(err);
     });
 };
 
-// PATCH
-const updateAvatar = (req, res) => {
+// +
+const updateAvatar = (req, res, next) => {
   const { _id } = req.user;
   const { avatar } = req.body;
   User.findByIdAndUpdate(
@@ -69,10 +142,16 @@ const updateAvatar = (req, res) => {
     },
   )
     .then((user) => {
-      checkId(user, res);
+      if (!user) {
+        throw new NotFoundError('Карточка или пользователь не найден');
+      }
+      res.send(user);
     })
     .catch((err) => {
-      checkErrors(err, res);
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('Переданы некорректные данные'));
+      }
+      next(err);
     });
 };
 
@@ -82,4 +161,6 @@ module.exports = {
   getUserById,
   updateProfile,
   updateAvatar,
+  login,
+  getProfile,
 };

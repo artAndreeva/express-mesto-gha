@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-require('mongoose-type-url');
+const { regExp } = require('../utills/constants');
 
-const cardScheme = mongoose.Schema({
+const cardSchema = mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -9,8 +9,12 @@ const cardScheme = mongoose.Schema({
     maxLength: 30,
   },
   link: {
-    type: mongoose.Schema.Types.Url,
+    type: String,
     required: true,
+    validate: {
+      validator: (value) => regExp.test(value),
+      message: 'неправильная ссылка',
+    },
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
@@ -28,4 +32,4 @@ const cardScheme = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('card', cardScheme);
+module.exports = mongoose.model('card', cardSchema);
