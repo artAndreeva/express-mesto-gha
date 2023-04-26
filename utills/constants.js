@@ -1,4 +1,4 @@
-const regExp = /^https?:\/\/(www\.)?[\W+\w]+$/;
+const regExp = /https?:\/\/(www\.)?[\w\W]+\.[\w\W]+/;
 const JWT_SECRET = '5ec8c0d866a6afd6d03ac9736278d0963453b59d50c6bf4f90431ec405185fa6';
 const PORT = 3000;
 const BASE_URL = 'mongodb://127.0.0.1:27017/mestodb';

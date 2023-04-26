@@ -6,6 +6,7 @@ const router = require('./routes');
 const { PORT, BASE_URL } = require('./utills/constants');
 const authRouter = require('./routes/auth');
 const auth = require('./middlewares/auth');
+const handleErrors = require('./middlewares/handleErrors');
 
 const app = express();
 
@@ -20,15 +21,6 @@ app.use(router);
 
 app.use(errors());
 
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  res.status(statusCode)
-    .send({
-      message: statusCode === 500
-        ? 'На сервере произошла ошибка'
-        : message,
-    });
-  next();
-});
+app.use(handleErrors);
 
 app.listen(PORT);
