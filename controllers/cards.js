@@ -63,6 +63,7 @@ const likeCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError('Карточка или пользователь не найден');
       }
+      res.send(card);
     })
     .catch(next);
 };
@@ -80,6 +81,7 @@ const unlikeCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError('Карточка или пользователь не найден');
       }
+      res.send(card);
     })
     .catch(next);
 };
